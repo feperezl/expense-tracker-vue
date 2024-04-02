@@ -1,3 +1,31 @@
+<script setup>
+import { ref } from 'vue';
+import { useToast } from 'vue-toastification'
+
+  const text = ref ('');
+  const ammount = ref ('');
+
+  const emit = defineEmits(['transactionSubmited']);
+
+  const toast = useToast();
+
+  const onSubmit = () => {
+    if(!text.value || !ammount.value) {
+      toast.error('Both fields must be filled');
+      return;
+    }
+    
+    const transactionData = {
+      text: text.value,
+      ammount: parseFloat(ammount.value)
+    }
+
+    emit('transactionSubmitted', transactionData);
+
+    text.value='';
+    ammount.value="";
+  }
+</script>
 <template>
     <h3>Add new transaction</h3>
       <form id="form" @submit.prevent="onSubmit">
@@ -15,22 +43,3 @@
         <button class="btn">Add transaction</button>
       </form>
 </template>
-<script setup>
-import { ref } from 'vue';
-import { useToast } from 'vue-toastification'
-
-  const text = ref ('');
-  const ammount = ref ('');
-
-  const toast = useToast();
-
-  const onSubmit = () => {
-    if(!text.value || !ammount.value) {
-      toast.error('Both fields must be filled');
-      return;
-    }
-    console.log(text.value, ammount.value);
-    text.value='';
-    ammount.value="";
-  }
-</script>
